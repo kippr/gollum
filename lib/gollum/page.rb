@@ -4,7 +4,7 @@ module Gollum
 
     Wiki.page_class = self
 
-    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|(media)?wiki)$/i
+    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|(media)?wiki|mm)$/i
     FORMAT_NAMES = { :markdown  => "Markdown",
                      :textile   => "Textile",
                      :rdoc      => "RDoc",
@@ -13,7 +13,8 @@ module Gollum
                      :rest      => "reStructuredText",
                      :asciidoc  => "AsciiDoc",
                      :mediawiki => "MediaWiki",
-                     :pod       => "Pod" }
+                     :pod       => "Pod",
+                     :mindmap   => "FreeMind"}
 
     # Sets a Boolean determing whether this page is a historical version.
     #
@@ -75,6 +76,8 @@ module Gollum
           :roff
         when /\.(media)?wiki$/i
           :mediawiki
+        when /\.mm$/i
+          :mindmap
         else
           nil
       end
@@ -347,6 +350,7 @@ module Gollum
         when :asciidoc  then 'asciidoc'
         when :pod       then 'pod'
         when :mediawiki then 'mediawiki'
+        when :mindmap   then 'mm'
       end
     end
 
