@@ -142,10 +142,25 @@ else
   end
 
   # todo: kp: temp
+  require 'nokogiri'
   class FreemindMarkup < Gollum::Markup
+
+
+      def print node
+          @result << "<ul>"
+          @result << "<li>#{node['TEXT']}"
+          node.xpath('./node').each{ |n| print n }
+          @result << "</ul>"
+      end
+
       def do_render data
-          print data
-          data
+          @result = []
+          xml = Nokogiri::XML( data )
+          xml.remove_namespaces!
+          root = xml.at_xpath("/map/node")
+          @result << root['TEXT']
+          root.xpath("./node").each{ |n| print n }
+          @result.join("\n")
       end
   end
   Gollum::Wiki.markup_classes[:mindmap] = FreemindMarkup
