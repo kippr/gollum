@@ -141,5 +141,14 @@ else
     require cfg
   end
 
+  # todo: kp: temp
+  class FreemindMarkup < Gollum::Markup
+      def do_render data
+          print data
+          data
+      end
+  end
+  Gollum::Wiki.markup_classes[:mindmap] = FreemindMarkup
+
   Precious::App.run!(options)
 end

@@ -60,17 +60,9 @@ module Gollum
       data = extract_tex(data)
       data = extract_wsd(data)
       data = extract_tags(data)
-      begin
-        data = GitHub::Markup.render(@name, data)
-        if data.nil?
-          raise "There was an error converting #{@name} to HTML."
-        end
-      rescue Object => e
-        data = %{<p class="gollum-error">#{e.message}</p>}
-      end
       data = process_tags(data)
       data = process_code(data, encoding)
-
+      data = do_render(data)
       doc = Nokogiri::HTML::DocumentFragment.parse(data)
       doc = sanitize.clean_node!(doc) if sanitize
       doc,toc = process_headers(doc)
@@ -86,6 +78,19 @@ module Gollum
       end
       data
     end
+
+    def do_render data
+      begin
+        data = GitHub::Markup.render(@name, data)
+        if data.nil?
+          raise "There was an error converting #{@name} to HTML."
+        end
+      rescue Object => e
+        data = %{<p class="gollum-error">#{e.message}</p>}
+      end
+      data
+    end
+
 
     # Inserts header anchors and creates TOC
     #
